@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CleanArchitecture.Data
 {
@@ -7,7 +8,9 @@ namespace CleanArchitecture.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
-            dbContextOptionsBuilder.UseSqlServer("data source=.\\ANBU;initial catalog=StreamerDB;user id=sa;password=ps015-j;persist security info=True;");
+            dbContextOptionsBuilder.UseSqlServer("data source=.\\ANBU;initial catalog=StreamerDB;user id=sa;password=ps015-j;persist security info=True;")
+                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name}, LogLevel.Information )
+                .EnableSensitiveDataLogging();
         }
         public DbSet<Streamer>? Streamers { get; set; }
         public DbSet<Video>? Videos { get; set; }

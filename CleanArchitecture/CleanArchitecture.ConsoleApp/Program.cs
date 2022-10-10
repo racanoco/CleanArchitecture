@@ -3,40 +3,68 @@ using CleanArchitecture.Domain;
 
 StreamerDbContext dbContext = new();
 
-Streamer streamer = new()
+// await AddNewRecords("Disney", "www.disney.com");
+
+QueryStreaming();
+
+
+void QueryStreaming()
 {
-    Name = "Amazon Prime",
-    Url = "https://www.amazonprime.com"
-};
+    var streamers = dbContext?.Streamers!.ToList();
 
-dbContext!.Streamers!.Add(streamer);
+    foreach (var streamer in streamers)
+    {
+        Console.WriteLine($"{streamer.Id} - {streamer.Name}");
+    }
+}
 
-await dbContext.SaveChangesAsync();
 
-var movies = new List<Video>
+async Task AddNewRecords(string streamerName, string streamerUrl)
+{
+    try
+    {
+        Streamer streamer = new()
+        {
+            Name = streamerName,
+            Url = streamerUrl
+        };
+
+        dbContext!.Streamers!.Add(streamer);
+
+        await dbContext.SaveChangesAsync();
+
+        var movies = new List<Video>
 {
     new Video
     {
-        Name = "Mad Max",
+        Name = "X Men 1",
         StreamerId = streamer.Id,
     },
     new Video
     {
-        Name = "Batman",
+        Name = "X Men 2",
         StreamerId = streamer.Id,
     },
     new Video
     {
-        Name = "Crepusculo",
+        Name = "X Men 3",
         StreamerId = streamer.Id,
     },
     new Video
     {
-        Name = "Citizen Kane",
+        Name = "X Men 4",
         StreamerId = streamer.Id,
     }
 };
 
-await dbContext.AddRangeAsync(movies);
+        await dbContext.AddRangeAsync(movies);
 
-await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
+    }
+    catch (Exception)
+    {
+
+        throw;
+    }    
+
+}

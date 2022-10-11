@@ -8,7 +8,9 @@ StreamerDbContext dbContext = new();
 
 // QueryStreaming();
 
-await QueryFilter();
+// await QueryFilter();
+
+await QueryMethods();
 
 Console.WriteLine("Presione cualquier tecla para temrinar el proceso");
 Console.ReadKey();
@@ -96,5 +98,25 @@ async Task AddNewRecords(string streamerName, string streamerUrl)
         throw;
     }    
 
+}
+
+async Task QueryMethods()
+{
+    var dbContextStreamers = dbContext!.Streamers!;
+
+    // Saltará una excepción si no encuentra resultado.
+    var streamerFirstAsync = await dbContextStreamers.Where(y => y.Name.Contains('a')).FirstAsync();
+
+    // Retornará null si no hay resultado.
+    var streamer2FirstOrDefaultAsync = await dbContextStreamers.Where(y => y.Name.Contains('a')).FirstOrDefaultAsync();
+
+    // Aplicar directamente el FirstOrDefaultAsync
+    var streamer3FirstOrDefaultAsync = await dbContextStreamers.FirstOrDefaultAsync(y => y.Name.Contains('a'));
+
+    var singleAsync = await dbContextStreamers.Where(y => y.Id == 1).SingleAsync();
+
+    var singleOrDefaultAsync = await dbContextStreamers.Where(y => y.Id == 1).SingleOrDefaultAsync();
+
+    var resultado = await dbContextStreamers.FindAsync(1);
 }
 

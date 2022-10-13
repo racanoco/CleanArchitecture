@@ -10,7 +10,8 @@ StreamerDbContext dbContext = new();
 
 // await QueryFilter();
 
-await QueryMethods();
+// await QueryMethods();
+await QueryLinq();
 
 Console.WriteLine("Presione cualquier tecla para temrinar el proceso");
 Console.ReadKey();
@@ -118,5 +119,31 @@ async Task QueryMethods()
     var singleOrDefaultAsync = await dbContextStreamers.Where(y => y.Id == 1).SingleOrDefaultAsync();
 
     var resultado = await dbContextStreamers.FindAsync(1);
+}
+
+async Task QueryLinq()
+{   
+
+    var streamers = await (from i in dbContext.Streamers select i).ToListAsync();
+
+    foreach (var streamer in streamers)
+    {
+        Console.WriteLine($"{streamer.Id} - {streamer.Name}");
+    }
+
+    Console.WriteLine($"Ingrese el servicio de streaming");
+
+    var streamerName = Console.ReadLine();
+
+    var streamersWhere = await (from i in dbContext.Streamers
+                           where EF.Functions.Like(i.Name, $"%{streamerName}%")
+                           select i).ToListAsync();
+
+    foreach (var streamer in streamersWhere)
+    {
+        Console.WriteLine($"{streamer.Id} - {streamer.Name}");
+    }
+
+
 }
 

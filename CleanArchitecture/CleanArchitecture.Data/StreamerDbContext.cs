@@ -12,6 +12,18 @@ namespace CleanArchitecture.Data
                 .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name}, LogLevel.Information )
                 .EnableSensitiveDataLogging();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Fluent API
+            // Relación de 1 a muchos OPCIONAL
+            modelBuilder.Entity<Streamer>()
+                .HasMany(m => m.Videos)
+                .WithOne(m => m.Streamer)
+                .HasForeignKey(m => m.StreamerId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+        }
         public DbSet<Streamer>? Streamers { get; set; }
         public DbSet<Video>? Videos { get; set; }
     }

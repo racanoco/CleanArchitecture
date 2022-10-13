@@ -16,13 +16,23 @@ namespace CleanArchitecture.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Fluent API
-            // Relación de 1 a muchos OPCIONAL
+
+            // Relación de 1 a muchos.
             modelBuilder.Entity<Streamer>()
                 .HasMany(m => m.Videos)
                 .WithOne(m => m.Streamer)
                 .HasForeignKey(m => m.StreamerId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Relación de muchos a muchos.
+            modelBuilder.Entity<Video>()
+                .HasMany(p => p.Actors)
+                .WithMany(t => t.Videos)
+                .UsingEntity<VideoActor>(
+                    pt => pt.HasKey(e => new {e.ActorId, e.VideoId})
+                );
+
         }
         public DbSet<Streamer>? Streamers { get; set; }
         public DbSet<Video>? Videos { get; set; }

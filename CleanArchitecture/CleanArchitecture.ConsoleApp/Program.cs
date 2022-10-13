@@ -151,6 +151,7 @@ async Task TrackingAndNotTracking()
     var streamerWithTracking = await dbContext!.Streamers!.FirstOrDefaultAsync(x => x.Id == 2);
 
     // Utilizar cuando no hay que realizar cambios en los registros. AsNoTracking "sin seguimineto" sirve para evitar que EF Core le de seguimiento, esto hará que tu aplicación ejecute queries más rápidamente.
+    // Cuando termina libera la memoria.
     var streamerWithNoTracking = await dbContext!.Streamers!.AsNoTracking().FirstOrDefaultAsync(x => x.Id == 2);
 
     streamerWithTracking.Name = "Amazon Prime";

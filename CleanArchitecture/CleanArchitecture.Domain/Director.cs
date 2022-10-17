@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Domain.Common;
+﻿using CleanArchitecture.Common;
 
 namespace CleanArchitecture.Domain
 {

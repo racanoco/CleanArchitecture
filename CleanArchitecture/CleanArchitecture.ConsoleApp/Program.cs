@@ -13,8 +13,8 @@ StreamerDbContext dbContext = new();
 // await AddNewStreamerWithVideo();
 // await AddNewStreamerWithVideoId();
 // await AddNewActorWithVideo();
-
-await AddNewDirectorWithVideo();
+// await AddNewDirectorWithVideo();
+await MultipleEntitiesQuery();
 
 Console.WriteLine("Presione cualquier tecla para temrinar el proceso");
 Console.ReadKey();
@@ -227,6 +227,54 @@ async Task AddNewDirectorWithVideo()
 
     await dbContext.AddAsync(director);
     await dbContext.SaveChangesAsync();
+}
+
+async Task MultipleEntitiesQuery()
+{
+    //var videosWithActores = await dbContext!.Videos!.Include(q => q.Actors).FirstOrDefaultAsync(q => q.Id == 1);
+
+    //var actor = await dbContext!.Actores!.Select(q => q.Name).ToListAsync();
+    try
+    {
+
+        // Muestra todas las peliculas si contiene director o no.
+        var videoWithDirector = await dbContext!.Videos!                            
+                            .Include(q => q.Director)
+                            .Select(q =>
+                               new
+                               {
+                                   Director_Nombre_Completo = $"{q.Director.Name} {q.Director.LastName}",
+                                   Movie = q.Name
+                               }
+                             )
+                            .ToListAsync();
+
+        //// Muestra peliculas si contiene director
+        //var videoWithDirector = await dbContext!.Videos!
+        //                    .Where(q => q.Director != null)
+        //                    .Include(q => q.Director)
+        //                    .Select(q =>
+        //                       new
+        //                       {
+        //                           Director_Nombre_Completo = $"{q.Director.Name} {q.Director.LastName}",
+        //                           Movie = q.Name
+        //                       }
+        //                     )
+        //                    .ToListAsync();
+
+
+        foreach (var pelicula in videoWithDirector)
+        {
+            Console.WriteLine($"{pelicula.Movie}  - {pelicula.Director_Nombre_Completo} ");
+        }
+
+    }
+    catch (Exception ex)
+    {
+
+        throw;
+    }
+    
 }
 
 

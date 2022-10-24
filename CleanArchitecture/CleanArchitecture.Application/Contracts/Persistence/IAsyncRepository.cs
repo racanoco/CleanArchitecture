@@ -3,6 +3,10 @@ using System.Linq.Expressions;
 
 namespace CleanArchitecture.Application.Contracts.Persistence
 {
+    /// <summary>
+    /// Interfaz con métodos genéricos para el mantenimiento de las entidades.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IAsyncRepository<T>where T : BaseDomainModel
     {
         // Retorna una lista de todos los registros de una entidad determinada.

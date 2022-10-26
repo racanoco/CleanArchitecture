@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CleanArchitecture.Application.Features.Streamers.Commands;
+using CleanArchitecture.Application.Features.Streamers.Commands.CreateStreamer;
 using CleanArchitecture.Domain;
 
 namespace CleanArchitecture.Application.Mappings
@@ -8,7 +8,7 @@ namespace CleanArchitecture.Application.Mappings
     {
         public StreamerProfile()
         {
-            CreateMap<StreamerCommand, Streamer>()
+            CreateMap<CreateStreamerCommand, Streamer>()
                 .ForMember(d => d.Name, o => o.MapFrom(c => c.Name))
                 .ForMember(d => d.Url, o => o.MapFrom(c => c.Url)); ;
         }

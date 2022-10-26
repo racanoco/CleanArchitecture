@@ -1,22 +1,21 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Contracts.Infrastructure;
 using CleanArchitecture.Application.Contracts.Persistence;
-using CleanArchitecture.Application.Features.Streamers.Commands;
 using CleanArchitecture.Application.Models;
 using CleanArchitecture.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace CleanArchitecture.Application.Features.Streamers.Handler
+namespace CleanArchitecture.Application.Features.Streamers.Commands.CreateStreamer
 {
-    public class StreamerCommandHandler : IRequestHandler<StreamerCommand, int>
+    public class CreateStreamerCommandHandler : IRequestHandler<CreateStreamerCommand, int>
     {
         private readonly IStreamerRepository _streamerRepository;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
-        private readonly ILogger<StreamerCommandHandler> _logger;
+        private readonly ILogger<CreateStreamerCommandHandler> _logger;
 
-        public StreamerCommandHandler(IStreamerRepository streamerRepository, IMapper mapper, IEmailService emailService, ILogger<StreamerCommandHandler> logger)
+        public CreateStreamerCommandHandler(IStreamerRepository streamerRepository, IMapper mapper, IEmailService emailService, ILogger<CreateStreamerCommandHandler> logger)
         {
             _streamerRepository = streamerRepository;
             _mapper = mapper;
@@ -24,7 +23,7 @@ namespace CleanArchitecture.Application.Features.Streamers.Handler
             _logger = logger;
         }
 
-        public async Task<int> Handle(StreamerCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateStreamerCommand request, CancellationToken cancellationToken)
         {
             var streamerEntity = _mapper.Map<Streamer>(request);
 
@@ -53,9 +52,9 @@ namespace CleanArchitecture.Application.Features.Streamers.Handler
             catch (Exception)
             {
                 _logger.LogError($"Error enviando el email de {streamer.Id}");
-                
+
             }
-            
+
         }
     }
 }

@@ -4,7 +4,6 @@ using CleanArchitecture.Application.Features.Streamers.Commands.UpdateStreamer;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Runtime.CompilerServices;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -25,6 +24,7 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<int>> CreateStreamer([FromBody]CreateStreamerCommand createStreamerCommand)
         {
             var response = await _mediator.Send(createStreamerCommand);
+
             return Ok(response);
 
         }

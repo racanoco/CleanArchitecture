@@ -1,5 +1,5 @@
-﻿using CleanArchitecture.Data;
-using CleanArchitecture.Domain;
+﻿using CleanArchitecture.Domain;
+using CleanArchitecture.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 StreamerDbContext dbContext = new();

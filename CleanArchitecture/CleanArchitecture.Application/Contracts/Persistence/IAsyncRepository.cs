@@ -16,18 +16,20 @@ namespace CleanArchitecture.Application.Contracts.Persistence
         Task<IReadOnlyList<T>> GetAsync(Expression<Func<T,bool>> expression);
 
         // Retorna una colección de datos con una determinada condición lógica dentro de query ordenado.
-        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? expression = null, 
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string? includeString = null,
             bool disableTracking = true);
 
         // Retorna una colección de datos relacionada entre dentidadescon una determinada condición lógica dentro de query ordenado.
-        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+        Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? expression = null, 
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             List<Expression<Func<T, object>>>? includes = null,
             bool disableTracking = true);
         
         Task<T> GetByIdAsync(int id);
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
-        Task<T> DeleteAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }

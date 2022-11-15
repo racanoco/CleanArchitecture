@@ -2,7 +2,7 @@
 using CleanArchitecture.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-StreamerDbContext dbContext = new();
+StreamerDbContext dbContext = new(null);
 
 // await AddNewRecords("Disney", "www.disney.com");
 // QueryStreaming();

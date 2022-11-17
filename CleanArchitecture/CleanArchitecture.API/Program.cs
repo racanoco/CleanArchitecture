@@ -1,4 +1,5 @@
 using CleanArchitecture.Application;
+using CleanArchitecture.Identity;
 using CleanArchitecture.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,15 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructureServiceRegistration(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddIdentityServiceRegistration(builder.Configuration);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    );
+});
 
 var app = builder.Build();
 
@@ -24,7 +34,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
 app.MapControllers();
 

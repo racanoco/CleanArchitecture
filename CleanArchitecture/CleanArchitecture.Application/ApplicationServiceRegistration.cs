@@ -9,7 +9,7 @@ namespace CleanArchitecture.Application
     /// <summary>
     /// Clase estática para la configuración de inyección de dependencias.
     /// </summary>
-    public static class ApplicationServicesRegistration
+    public static class ApplicationServiceRegistration
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {

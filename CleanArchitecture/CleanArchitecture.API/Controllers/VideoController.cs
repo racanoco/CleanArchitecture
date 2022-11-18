@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.Features.Videos.Queries;
 using CleanArchitecture.Application.Features.Videos.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Net;
@@ -20,6 +21,7 @@ namespace CleanArchitecture.API.Controllers
 
         #region GET
         [HttpGet("{userName}", Name = "GetVideo")]
+        [Authorize]
         [ProducesResponseType(typeof(IEnumerable<VideoViewModel>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable>> GetVideosByUserName(string userName)
         {

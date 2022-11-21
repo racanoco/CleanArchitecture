@@ -10,7 +10,7 @@ namespace CleanArchitecture.Application.Mappings
         {
             CreateMap<CreateStreamerCommand, Streamer>()
                 .ForMember(d => d.Name, o => o.MapFrom(c => c.Name))
-                .ForMember(d => d.Url, o => o.MapFrom(c => c.Url)); ;
+                .ForMember(d => d.Url, o => o.MapFrom(c => c.Url));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.API.Errors;
+using CleanArchitecture.Application.Exceptions;
+using Newtonsoft.Json;
 using System.Net;
-using System.Text.Json;
 
 namespace CleanArchitecture.API.Middleware
 {
@@ -20,7 +21,7 @@ namespace CleanArchitecture.API.Middleware
             _hostEnvironment = hostEnvironment;
         }
 
-        public async Task InvokeAsync(HttpContext context )
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -29,18 +30,38 @@ namespace CleanArchitecture.API.Middleware
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                var response = _hostEnvironment.IsDevelopment()
-                    ? new CodeErrorException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace) // Is Development
-                    : new CodeErrorException((int)HttpStatusCode.InternalServerError); // Is Produccion 
+                context.Response.ContentType = "application/json";               
 
-                var options = new JsonSerializerOptions { PropertyNamingPolicy= JsonNamingPolicy.CamelCase };
+                var statusCode = (int)HttpStatusCode.InternalServerError;
+                var result = string.Empty;
 
-                var json = JsonSerializer.Serialize(response, options);
+                switch (ex)
+                {
+                    case NotFoundException notFoundException:
+                        statusCode = (int)HttpStatusCode.NotFound;
+                        break;
 
-                await context.Response.WriteAsync(json);
+                    case ValidationException validationException:
+                        statusCode = (int)HttpStatusCode.BadRequest;
+                        var validationJson = JsonConvert.SerializeObject(validationException.Errors);
+                        result = JsonConvert.SerializeObject(new CodeErrorException(statusCode, ex.Message,validationJson));
+                        break;
+
+                    case BadRequestException badRequestException:
+                        statusCode = (int)HttpStatusCode.BadRequest;
+                        break;
+                    
+                    default:
+                        break;
+                }
+
+                if(string.IsNullOrEmpty(result))
+                    result = JsonConvert.SerializeObject(new CodeErrorException(statusCode,ex.Message,ex.StackTrace));
+                
+                context.Response.StatusCode = statusCode;
+
+                await context.Response.WriteAsync(result);
             }
         }
     }

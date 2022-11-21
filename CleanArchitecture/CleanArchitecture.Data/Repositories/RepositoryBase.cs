@@ -77,14 +77,13 @@ namespace CleanArchitecture.Infrastructure.Repositories
         public async Task<T> AddAsync(T entity)
         {
             _streamerDbContext.Set<T>().Add(entity);
-
             await _streamerDbContext.SaveChangesAsync();
-
             return entity;
         }
 
         public async Task<T> UpdateAsync(T entity)
         {
+            _streamerDbContext.Set<T>().Attach(entity);
             _streamerDbContext.Entry(entity).State = EntityState.Modified;
             await _streamerDbContext.SaveChangesAsync();
             return entity;
@@ -93,11 +92,23 @@ namespace CleanArchitecture.Infrastructure.Repositories
         public async Task DeleteAsync(T entity)
         {
             _streamerDbContext.Set<T>().Remove(entity);
-
             await _streamerDbContext.SaveChangesAsync();
         }
 
+        public void AddEntity(T entity)
+        {
+            _streamerDbContext.Set<T>().Add(entity);
+        }
 
+        public void UpdateEntity(T entity)
+        {
+            _streamerDbContext.Set<T>().Attach(entity);
+            _streamerDbContext.Entry(entity).State = EntityState.Modified;
+        }
 
+        public void DeleteEntity(T entity)
+        {
+            _streamerDbContext.Set<T>().Remove(entity);
+        }
     }
 }
